@@ -84,8 +84,20 @@ router.post('/registrations', registerLimiter, sanitize, antiBot, validateRegist
       }
     });
 
-    /* After the response. Failures are recorded on the row, never surfaced to
-       the director as a registration failure — they ARE registered. */
+    /* Both e-mails go out after the response and neither is awaited. A slow
+       SMTP handshake must never hold open a request whose arrival time decides
+       a public ranking. */
+
+    /* The organisation needs to know who to go and see. */
+    mailer.sendOrganiserAlert('registration', {
+      school: doc.school, gov: doc.gov, director: doc.director,
+      phone: doc.phone, email: doc.email, lang: doc.lang,
+      ref: doc.ref, rank, at: doc.registeredAt,
+      taken: registry.get()?.taken ?? 0
+    }).catch(err => console.error('[mail:alert]', doc.ref, err.message));
+
+    /* Failures are recorded on the row, never surfaced to the director as a
+       registration failure — they ARE registered. */
     mailer.sendConfirmation({
       to: doc.email, lang: doc.lang, school: doc.school,
       gov: doc.gov, ref: doc.ref, registeredAt: doc.registeredAt, rank
@@ -121,6 +133,12 @@ router.post('/waitlist', registerLimiter, sanitize, antiBot, validateWaitlist, a
       joinedAt: doc.joinedAt.toISOString(),
       lang: doc.lang, email: doc.email
     }});
+
+    mailer.sendOrganiserAlert('waitlist', {
+      school: doc.school, gov: doc.gov, director: doc.director,
+      phone: doc.phone, email: doc.email, lang: doc.lang,
+      ref: doc.ref, rank, at: doc.joinedAt
+    }).catch(err => console.error('[mail:alert:wl]', doc.ref, err.message));
 
     mailer.sendWaitlist({
       to: doc.email, lang: doc.lang, school: doc.school,
