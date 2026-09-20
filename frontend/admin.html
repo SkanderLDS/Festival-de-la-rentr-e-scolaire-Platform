@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="fr" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<!-- Internal tool. Must never appear in a search result. -->
+<meta name="robots" content="noindex,nofollow,noarchive">
+<meta name="referrer" content="no-referrer">
+<title>Administration — FIESTADREAM 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --night:#150E33; --bg:#100A26; --panel:#180F3A; --panel-2:#1E1449;
+  --line:rgba(247,242,230,.13); --line-2:rgba(247,242,230,.26);
+  --text:#F2ECDD; --text-2:#BDB3D4; --text-3:#8C82A8;
+  --gold:#F4A518; --gold-lit:#F9B527; --teal:#3FBAC7;
+  --ok:#3FBF7F; --warn:#E8A317; --bad:#E0553F;
+  --tunis:#D63A3A; --ariana:#2E6FD9; --manouba:#17915A; --benarous:#E8A317;
+  --f:"Figtree","Helvetica Neue",Arial,sans-serif;
+  --m:"JetBrains Mono",ui-monospace,Menlo,monospace;
+  --r:12px; --r-l:18px;
+}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:var(--f);font-size:15px;line-height:1.55;-webkit-font-smoothing:antialiased}
+h1,h2,h3{margin:0;line-height:1.25;font-weight:800}
+button,input,select{font:inherit}
+:focus-visible{outline:3px solid var(--gold);outline-offset:2px;border-radius:6px}
+.wrap{max-width:1500px;margin-inline:auto;padding-inline:clamp(1rem,3vw,2rem)}
+.mono{font-family:var(--m);font-variant-numeric:tabular-nums}
+[hidden]{display:none!important}
+
+/* ── login ─────────────────────────────────────────────────────────────── */
+.login{min-height:100dvh;display:grid;place-items:center;padding:1.5rem}
+.login__card{width:100%;max-width:400px;background:var(--panel);border:1px solid var(--line);border-radius:var(--r-l);padding:2rem}
+.login__card h1{font-size:1.35rem;margin-bottom:.35rem}
+.login__card p{color:var(--text-3);font-size:.88rem;margin:0 0 1.6rem}
+.field{margin-bottom:1rem}
+.field label{display:block;font-size:.8rem;font-weight:700;margin-bottom:.4rem;color:var(--text-2)}
+input[type=text],input[type=password],input[type=search],select{
+  width:100%;padding:.7rem .85rem;border-radius:var(--r);border:1.5px solid var(--line-2);
+  background:var(--bg);color:var(--text);font-size:.94rem}
+input:focus,select:focus{border-color:var(--gold);outline:none}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:.45rem;padding:.62rem 1.1rem;
+  border-radius:999px;border:1.5px solid transparent;font-weight:700;font-size:.88rem;cursor:pointer;
+  text-decoration:none;transition:filter .15s,background .15s}
+.btn:active{transform:translateY(1px)}
+.btn--gold{background:linear-gradient(170deg,var(--gold-lit),var(--gold));color:#3A2400}
+.btn--gold:hover{filter:brightness(1.07)}
+.btn--ghost{border-color:var(--line-2);background:transparent;color:var(--text)}
+.btn--ghost:hover{background:var(--panel-2)}
+.btn--ok{background:var(--ok);color:#06301B}
+.btn--bad{background:transparent;border-color:var(--bad);color:var(--bad)}
+.btn--bad:hover{background:color-mix(in srgb,var(--bad) 18%,transparent)}
+.btn--sm{padding:.35rem .7rem;font-size:.78rem}
+.btn[disabled]{opacity:.45;cursor:not-allowed}
+.msg{padding:.7rem .9rem;border-radius:var(--r);font-size:.85rem;font-weight:600;margin-bottom:1rem}
+.msg--bad{background:color-mix(in srgb,var(--bad) 18%,transparent);color:#FFC4B8}
+.msg--ok{background:color-mix(in srgb,var(--ok) 16%,transparent);color:#B6F2D4}
+
+/* ── shell ─────────────────────────────────────────────────────────────── */
+.top{position:sticky;top:0;z-index:40;background:color-mix(in srgb,var(--bg) 92%,transparent);
+  backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.top__in{display:flex;align-items:center;gap:.8rem;min-height:62px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:.6rem;font-weight:800}
+.brand span{font-size:.68rem;color:var(--text-3);font-weight:600;display:block}
+.crown{width:30px;height:30px;color:var(--gold);flex:none}
+.top__sp{margin-inline-start:auto;display:flex;align-items:center;gap:.5rem;flex-wrap:wrap}
+.who{font-size:.82rem;color:var(--text-3)}
+.who b{color:var(--text)}
+
+/* ── stats ─────────────────────────────────────────────────────────────── */
+.stats{display:grid;gap:.8rem;grid-template-columns:repeat(auto-fit,minmax(168px,1fr));margin:1.4rem 0}
+.stat{background:var(--panel);border:1px solid var(--line);border-radius:var(--r-l);padding:1rem 1.1rem}
+.stat b{display:block;font-family:var(--m);font-size:1.75rem;font-weight:700;line-height:1.1}
+.stat span{font-size:.76rem;color:var(--text-3);font-weight:600}
+.stat--gold b{color:var(--gold)} .stat--ok b{color:var(--ok)}
+.stat--warn b{color:var(--warn)} .stat--teal b{color:var(--teal)}
+.bar{height:7px;border-radius:99px;background:rgba(255,255,255,.1);margin-top:.6rem;overflow:hidden;display:flex}
+.bar i{height:100%}
+
+/* ── tabs + toolbar ────────────────────────────────────────────────────── */
+.tabs{display:flex;gap:.4rem;margin-bottom:1rem;flex-wrap:wrap}
+.tab{padding:.5rem 1rem;border-radius:999px;border:1.5px solid var(--line-2);background:transparent;
+  color:var(--text-2);cursor:pointer;font-weight:700;font-size:.86rem}
+.tab[aria-selected=true]{background:var(--gold);border-color:var(--gold);color:#3A2400}
+.toolbar{display:flex;gap:.55rem;flex-wrap:wrap;align-items:center;margin-bottom:.9rem}
+.toolbar input[type=search]{max-width:240px}
+.toolbar select{max-width:180px}
+
+/* ── table ─────────────────────────────────────────────────────────────── */
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:var(--r-l);overflow:hidden}
+.scroll{overflow-x:auto}
+table{width:100%;border-collapse:collapse;min-width:1080px}
+thead th{position:sticky;top:0;text-align:left;font-size:.7rem;font-weight:800;letter-spacing:.03em;
+  color:var(--text-3);padding:.7rem .8rem;background:var(--panel-2);border-bottom:1px solid var(--line);white-space:nowrap}
+tbody td{padding:.7rem .8rem;border-bottom:1px solid var(--line);font-size:.87rem;vertical-align:middle}
+tbody tr:last-child td{border-bottom:0}
+tbody tr:hover{background:rgba(255,255,255,.028)}
+.c-rank{font-family:var(--m);color:var(--text-3);width:46px}
+.c-school{font-weight:600;max-width:290px}
+.c-school small{display:block;font-family:var(--m);font-size:.7rem;color:var(--text-3);font-weight:500}
+.gov{display:inline-flex;align-items:center;gap:.4rem;font-size:.8rem;font-weight:600;white-space:nowrap}
+.dot{width:9px;height:9px;border-radius:50%;flex:none}
+.c-contact a{color:var(--text-2);text-decoration:none;display:block;font-size:.8rem}
+.c-contact a:hover{color:var(--gold);text-decoration:underline}
+.ts{font-family:var(--m);font-size:.78rem;color:var(--text-2);white-space:nowrap}
+.ts i{display:block;font-style:normal;font-size:.7rem;color:var(--text-3)}
+.pill{display:inline-flex;align-items:center;gap:.3rem;padding:.2rem .6rem;border-radius:999px;
+  font-size:.73rem;font-weight:800;white-space:nowrap}
+.p-pending{background:color-mix(in srgb,var(--warn) 22%,transparent);color:var(--warn)}
+.p-approved{background:color-mix(in srgb,var(--ok) 20%,transparent);color:var(--ok)}
+.p-expired,.p-cancelled,.p-withdrawn{background:rgba(255,255,255,.08);color:var(--text-3)}
+.p-waiting{background:color-mix(in srgb,var(--teal) 20%,transparent);color:var(--teal)}
+.p-invited{background:color-mix(in srgb,var(--gold) 22%,transparent);color:var(--gold)}
+.p-converted{background:color-mix(in srgb,var(--ok) 20%,transparent);color:var(--ok)}
+.age{font-family:var(--m);font-size:.76rem}
+.age--old{color:var(--bad);font-weight:700}
+.acts{display:flex;gap:.35rem;flex-wrap:wrap}
+.empty{padding:3rem 1rem;text-align:center;color:var(--text-3)}
+.foot{display:flex;justify-content:space-between;align-items:center;gap:1rem;padding:.7rem .9rem;
+  background:var(--panel-2);font-size:.8rem;color:var(--text-3);flex-wrap:wrap}
+
+/* ── modal ─────────────────────────────────────────────────────────────── */
+.mask{position:fixed;inset:0;z-index:60;background:rgba(6,3,16,.76);backdrop-filter:blur(4px);
+  display:grid;place-items:center;padding:1.2rem}
+.modal{width:100%;max-width:430px;background:var(--panel);border:1px solid var(--line-2);
+  border-radius:var(--r-l);padding:1.5rem}
+.modal h3{font-size:1.05rem;margin-bottom:.4rem}
+.modal p{color:var(--text-2);font-size:.86rem;margin:0 0 1.1rem}
+.modal .row{display:flex;gap:.5rem;justify-content:flex-end;margin-top:1.2rem;flex-wrap:wrap}
+.toast{position:fixed;inset-block-end:1.2rem;inset-inline:0;z-index:70;display:flex;justify-content:center;pointer-events:none}
+.toast div{background:var(--panel-2);border:1px solid var(--line-2);border-radius:999px;
+  padding:.6rem 1.2rem;font-size:.86rem;font-weight:700;box-shadow:0 14px 34px -14px #000}
+</style>
+</head>
+<body>
+
+<!-- ══ LOGIN ══════════════════════════════════════════════════════════════ -->
+<div class="login" id="login">
+  <form class="login__card" id="loginForm">
+    <div class="brand" style="margin-bottom:1.2rem">
+      <svg class="crown" viewBox="0 0 48 48" fill="none" aria-hidden="true">
+        <path d="M6 34l-2.6-19.4c-.2-1.5 1.6-2.4 2.7-1.4l8.2 7.6c.9.8 2.3.6 2.9-.5l4.6-8.5c.6-1.1 2.2-1.1 2.8 0l4.6 8.5c.6 1.1 2 1.3 2.9.5l8.2-7.6c1.1-1 2.9-.1 2.7 1.4L42 34H6z" fill="currentColor"/>
+        <rect x="6" y="37" width="36" height="5" rx="2.5" fill="currentColor"/><circle cx="24" cy="9" r="3.2" fill="currentColor"/>
+      </svg>
+      <div>FIESTADREAM 2026<span>Administration</span></div>
+    </div>
+    <h1>Connexion</h1>
+    <p>Réservé à l'équipe d'organisation.</p>
+    <div class="msg msg--bad" id="loginErr" hidden></div>
+    <div class="field">
+      <label for="u">Identifiant</label>
+      <input type="text" id="u" autocomplete="username" autocapitalize="none" spellcheck="false" required>
+    </div>
+    <div class="field">
+      <label for="p">Mot de passe</label>
+      <input type="password" id="p" autocomplete="current-password" required>
+    </div>
+    <button class="btn btn--gold" type="submit" id="loginBtn" style="width:100%;margin-top:.4rem">Se connecter</button>
+    <p style="margin-top:1.1rem;font-size:.74rem;color:var(--text-3)">
+      La session expire automatiquement après 8 heures.</p>
+  </form>
+</div>
+
+<!-- ══ APP ════════════════════════════════════════════════════════════════ -->
+<div id="app" hidden>
+  <header class="top">
+    <div class="wrap top__in">
+      <div class="brand">
+        <svg class="crown" viewBox="0 0 48 48" fill="none" aria-hidden="true">
+          <path d="M6 34l-2.6-19.4c-.2-1.5 1.6-2.4 2.7-1.4l8.2 7.6c.9.8 2.3.6 2.9-.5l4.6-8.5c.6-1.1 2.2-1.1 2.8 0l4.6 8.5c.6 1.1 2 1.3 2.9.5l8.2-7.6c1.1-1 2.9-.1 2.7 1.4L42 34H6z" fill="currentColor"/>
+          <rect x="6" y="37" width="36" height="5" rx="2.5" fill="currentColor"/><circle cx="24" cy="9" r="3.2" fill="currentColor"/>
+        </svg>
+        <div>FIESTADREAM 2026<span>Administration</span></div>
+      </div>
+      <div class="top__sp">
+        <span class="who">Connecté&nbsp;: <b id="who">—</b></span>
+        <button class="btn btn--ghost btn--sm" id="btnRefresh" type="button">Actualiser</button>
+        <button class="btn btn--ghost btn--sm" id="btnLock" type="button">—</button>
+        <button class="btn btn--ghost btn--sm" id="btnLogout" type="button">Déconnexion</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap" style="padding-bottom:3rem">
+    <div class="stats" id="stats"></div>
+
+    <div class="tabs" role="tablist">
+      <button class="tab" role="tab" data-tab="reg" aria-selected="true" type="button">Inscriptions</button>
+      <button class="tab" role="tab" data-tab="wl"  aria-selected="false" type="button">Liste d'attente</button>
+    </div>
+
+    <div class="toolbar">
+      <input type="search" id="q" placeholder="Rechercher une école…" autocomplete="off">
+      <select id="fStatus"><option value="">Tous les statuts</option></select>
+      <select id="fGov">
+        <option value="">Tous les gouvernorats</option>
+        <option value="tunis">Tunis</option>
+        <option value="ariana">Ariana</option>
+        <option value="manouba">Manouba</option>
+        <option value="benarous">Ben Arous</option>
+      </select>
+      <button class="btn btn--ghost btn--sm" id="btnCsv" type="button">Exporter CSV</button>
+      <button class="btn btn--ghost btn--sm" id="btnReconcile" type="button">Recalculer le compteur</button>
+    </div>
+
+    <div class="panel">
+      <div class="scroll"><table><thead id="thead"></thead><tbody id="tbody"></tbody></table></div>
+      <div class="foot"><span id="count">—</span><span id="updated"></span></div>
+    </div>
+  </main>
+</div>
+
+<div id="modalHost"></div>
+<div class="toast" id="toast" hidden><div></div></div>
+
+<script>
+"use strict";
+/* ============================================================================
+ * Administration — FIESTADREAM 2026
+ *
+ * This screen is the only place directors' names, phones and e-mail addresses
+ * are ever rendered. Two consequences run through the whole file:
+ *   1. Every value is escaped before it touches innerHTML. An XSS here would
+ *      hand an attacker the session token AND the contact list.
+ *   2. The token lives in sessionStorage, not localStorage, so closing the tab
+ *      ends the session on a shared agency machine.
+ * ========================================================================== */
+
+/* Same origin by default; set this if the panel is served from elsewhere.
+   Whatever origin serves this file must also be listed in the API's
+   CORS_ORIGINS, or every request fails before it starts. */
+const API_BASE = "";
+
+const $  = s => document.querySelector(s);
+const $$ = s => [...document.querySelectorAll(s)];
+
+/* Full escape set — &, <, >, ", ' and /. */
+const esc = s => String(s == null ? "" : s).replace(/[&<>"'\/]/g, c => ({
+  "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;","/":"&#47;"
+}[c]));
+
+const GOV = {
+  tunis:    { fr:"Tunis",     day:"Mer 28 oct", hex:"var(--tunis)" },
+  ariana:   { fr:"Ariana",    day:"Jeu 29 oct", hex:"var(--ariana)" },
+  manouba:  { fr:"Manouba",   day:"Ven 30 oct", hex:"var(--manouba)" },
+  benarous: { fr:"Ben Arous", day:"Sam 31 oct", hex:"var(--benarous)" }
+};
+
+const STATUS_FR = {
+  pending:"En attente", approved:"Confirmée", expired:"Expirée", cancelled:"Annulée",
+  waiting:"En file", invited:"Invitée", converted:"Convertie", withdrawn:"Retirée"
+};
+
+const TZ = "Africa/Tunis";
+function fmt(iso){
+  const d = new Date(iso);
+  const p = new Intl.DateTimeFormat("fr-FR",{timeZone:TZ,hourCycle:"h23",
+    day:"2-digit",month:"2-digit",year:"numeric",hour:"2-digit",minute:"2-digit",second:"2-digit"}).formatToParts(d);
+  const v = t => p.find(x=>x.type===t).value;
+  return { t:`${v("hour")}:${v("minute")}:${v("second")}.${String(d.getMilliseconds()).padStart(3,"0")}`,
+           d:`${v("day")}/${v("month")}/${v("year")}` };
+}
+
+/* ── session ─────────────────────────────────────────────────────────────── */
+const KEY = "bqf.admin.token";
+let TOKEN = null, ME = null;
+try { TOKEN = sessionStorage.getItem(KEY); } catch {}
+
+function setToken(t){
+  TOKEN = t;
+  try { t ? sessionStorage.setItem(KEY,t) : sessionStorage.removeItem(KEY); } catch {}
+}
+
+async function api(path, opts = {}){
+  const r = await fetch(`${API_BASE}/api/admin${path}`, {
+    ...opts,
+    headers: { "content-type":"application/json",
+               ...(TOKEN ? { authorization:`Bearer ${TOKEN}` } : {}),
+               ...(opts.headers||{}) }
+  });
+  if (r.status === 401){ logout("Session expirée. Reconnectez-vous."); throw new Error("unauthorised"); }
+  const body = await r.json().catch(()=>({}));
+  if (!r.ok) throw new Error(body.message || `Erreur ${r.status}`);
+  return body.data;
+}
+
+/* ── login ───────────────────────────────────────────────────────────────── */
+$("#loginForm").addEventListener("submit", async e => {
+  e.preventDefault();
+  const btn = $("#loginBtn"), err = $("#loginErr");
+  err.hidden = true; btn.disabled = true; btn.textContent = "Connexion…";
+  try {
+    const r = await fetch(`${API_BASE}/api/admin/login`, {
+      method:"POST", headers:{ "content-type":"application/json" },
+      body: JSON.stringify({ username:$("#u").value.trim(), password:$("#p").value })
+    });
+    const body = await r.json().catch(()=>({}));
+    if (!r.ok) throw new Error(body.message || "Identifiants incorrects.");
+    setToken(body.data.token); ME = body.data.admin;
+    $("#p").value = "";
+    boot();
+  } catch (ex){
+    err.textContent = ex.message; err.hidden = false;
+  } finally {
+    btn.disabled = false; btn.textContent = "Se connecter";
+  }
+});
+
+function logout(note){
+  setToken(null); ME = null;
+  $("#app").hidden = true; $("#login").hidden = false;
+  if (note){ $("#loginErr").textContent = note; $("#loginErr").hidden = false; }
+}
+$("#btnLogout").addEventListener("click", () => logout());
+
+/* ── state ───────────────────────────────────────────────────────────────── */
+let TAB = "reg", STATS = null, ROWS = [], LOCKED = false;
+
+const STATUS_OPTS = {
+  reg: ["pending","approved","expired","cancelled"],
+  wl:  ["waiting","invited","converted","withdrawn"]
+};
+
+function syncStatusFilter(){
+  const sel = $("#fStatus"), cur = sel.value;
+  sel.innerHTML = `<option value="">Tous les statuts</option>` +
+    STATUS_OPTS[TAB].map(s=>`<option value="${s}">${esc(STATUS_FR[s])}</option>`).join("");
+  sel.value = STATUS_OPTS[TAB].includes(cur) ? cur : "";
+}
+
+$$(".tab").forEach(b => b.addEventListener("click", () => {
+  TAB = b.dataset.tab;
+  $$(".tab").forEach(x => x.setAttribute("aria-selected", String(x === b)));
+  syncStatusFilter();
+  load();
+}));
+
+let searchTimer;
+$("#q").addEventListener("input", () => { clearTimeout(searchTimer); searchTimer = setTimeout(load, 320); });
+$("#fStatus").addEventListener("change", load);
+$("#fGov").addEventListener("change", load);
+$("#btnRefresh").addEventListener("click", () => { loadStats(); load(); });
+
+/* ── stats ───────────────────────────────────────────────────────────────── */
+async function loadStats(){
+  try {
+    STATS = await api("/stats");
+    LOCKED = Boolean(STATS.locked);
+    const by = STATS.byStatus || {};
+    const n = k => by[k]?.n || 0;
+    const wl = STATS.waitlist || { waiting:0, invited:0 };
+
+    const segs = ["approved","pending"].map(k=>{
+      const w = n(k)/150*100;
+      const c = k==="approved" ? "var(--ok)" : "var(--warn)";
+      return `<i style="width:${w}%;background:${c}"></i>`;
+    }).join("");
+
+    $("#stats").innerHTML = `
+      <div class="stat stat--gold"><b>${STATS.taken} / 150</b><span>Places occupées</span>
+        <div class="bar">${segs}</div></div>
+      <div class="stat stat--ok"><b>${n("approved")}</b><span>Confirmées (avance reçue)</span></div>
+      <div class="stat stat--warn"><b>${n("pending")}</b><span>En attente d'avance</span></div>
+      <div class="stat stat--teal"><b>${wl.waiting}</b><span>Liste d'attente</span></div>
+      <div class="stat"><b>${(STATS.depositsExpectedDT||0).toLocaleString("fr-FR")} DT</b><span>Avances encaissées</span></div>
+      <div class="stat"><b>${(STATS.revenueExpectedDT||0).toLocaleString("fr-FR")} DT</b><span>Valeur des carnets confirmés</span></div>
+      ${STATS.mailFailed ? `<div class="stat"><b style="color:var(--bad)">${STATS.mailFailed}</b><span>E-mails en échec</span></div>` : ""}
+    `;
+    const b = $("#btnLock");
+    b.textContent = LOCKED ? "Rouvrir les inscriptions" : "Fermer les inscriptions";
+    b.className = "btn btn--sm " + (LOCKED ? "btn--gold" : "btn--ghost");
+  } catch (e){ if (e.message !== "unauthorised") toast(e.message); }
+}
+
+/* ── table ───────────────────────────────────────────────────────────────── */
+const HEAD_REG = ["#","École","Gouvernorat","Responsable","Contact","Horodatage","Âge","Statut","Actions"];
+const HEAD_WL  = ["#","École","Gouvernorat","Responsable","Contact","Inscrite le","Statut","Actions"];
+
+async function load(){
+  const p = new URLSearchParams();
+  if ($("#fStatus").value) p.set("status", $("#fStatus").value);
+  if ($("#fGov").value)    p.set("gov", $("#fGov").value);
+  if (TAB === "reg" && $("#q").value.trim()) p.set("search", $("#q").value.trim());
+  p.set("limit","300");
+
+  $("#thead").innerHTML = `<tr>${(TAB==="reg"?HEAD_REG:HEAD_WL).map(h=>`<th>${esc(h)}</th>`).join("")}</tr>`;
+  $("#tbody").innerHTML = `<tr><td colspan="9" class="empty">Chargement…</td></tr>`;
+
+  try {
+    const data = await api(`${TAB==="reg" ? "/registrations" : "/waitlist"}?${p}`);
+    ROWS = data.items || [];
+    /* The waiting-list endpoint has no server-side search, so filter here. */
+    if (TAB === "wl" && $("#q").value.trim()){
+      const q = $("#q").value.trim().toLowerCase();
+      ROWS = ROWS.filter(r => (r.school||"").toLowerCase().includes(q) ||
+                              (r.director||"").toLowerCase().includes(q));
+    }
+    render();
+    $("#count").textContent = `${ROWS.length} ligne${ROWS.length>1?"s":""} affichée${ROWS.length>1?"s":""} sur ${data.total} au total`;
+    const u = fmt(new Date().toISOString());
+    $("#updated").textContent = `Mis à jour à ${u.t.slice(0,8)}`;
+  } catch (e){
+    if (e.message === "unauthorised") return;
+    $("#tbody").innerHTML = `<tr><td colspan="9" class="empty">${esc(e.message)}</td></tr>`;
+  }
+}
+
+function render(){
+  if (!ROWS.length){
+    $("#tbody").innerHTML = `<tr><td colspan="9" class="empty">Aucune ligne pour ces filtres.</td></tr>`;
+    return;
+  }
+  $("#tbody").innerHTML = ROWS.map(r => TAB==="reg" ? rowReg(r) : rowWl(r)).join("");
+
+  $$("[data-act]").forEach(b => b.addEventListener("click", () => {
+    const { act, ref } = b.dataset;
+    const row = ROWS.find(x => x.ref === ref);
+    if (!row) return;
+    if (act === "approve") askApprove(row);
+    if (act === "release") askRelease(row);
+    if (act === "resend")  doResend(row);
+    if (act === "invite")  askInvite(row);
+    if (act === "wstatus") askWlStatus(row);
+  }));
+}
+
+function govCell(g){
+  const d = GOV[g] || { fr:g, day:"", hex:"var(--text-3)" };
+  return `<span class="gov"><i class="dot" style="background:${d.hex}"></i>${esc(d.fr)}
+    <small style="color:var(--text-3);font-weight:500">${esc(d.day)}</small></span>`;
+}
+function contactCell(r){
+  const phone = String(r.phone||"").replace(/\D/g,"");
+  return `<span class="c-contact">
+    <a href="tel:+216${esc(phone)}">+216 ${esc(phone)}</a>
+    <a href="mailto:${esc(r.email)}">${esc(r.email)}</a></span>`;
+}
+function pill(s){ return `<span class="pill p-${esc(s)}">${esc(STATUS_FR[s]||s)}</span>`; }
+
+function rowReg(r){
+  const ts = fmt(r.registeredAt);
+  const live = r.status==="pending" || r.status==="approved";
+  const old  = r.status==="pending" && r.ageHours >= 72;
+  return `<tr>
+    <td class="c-rank">${r.rank ? String(r.rank).padStart(2,"0") : "—"}</td>
+    <td class="c-school">${esc(r.school)}<small>${esc(r.ref)}</small></td>
+    <td>${govCell(r.gov)}</td>
+    <td>${esc(r.director)}</td>
+    <td>${contactCell(r)}</td>
+    <td class="ts">${esc(ts.t)}<i>${esc(ts.d)}</i></td>
+    <td><span class="age ${old?"age--old":""}">${r.ageHours}h</span></td>
+    <td>${pill(r.status)}${r.depositRef?`<small style="display:block;font-family:var(--m);font-size:.68rem;color:var(--text-3);margin-top:.2rem">${esc(r.depositRef)}</small>`:""}</td>
+    <td><div class="acts">
+      ${r.status==="pending" ? `<button class="btn btn--ok btn--sm" data-act="approve" data-ref="${esc(r.ref)}">Avance reçue</button>` : ""}
+      ${live ? `<button class="btn btn--bad btn--sm" data-act="release" data-ref="${esc(r.ref)}">Libérer</button>` : ""}
+      <button class="btn btn--ghost btn--sm" data-act="resend" data-ref="${esc(r.ref)}">Renvoyer</button>
+    </div></td>
+  </tr>`;
+}
+
+function rowWl(r){
+  const ts = fmt(r.joinedAt);
+  return `<tr>
+    <td class="c-rank">${String(r.queue||0).padStart(2,"0")}</td>
+    <td class="c-school">${esc(r.school)}<small>${esc(r.ref)}</small></td>
+    <td>${govCell(r.gov)}</td>
+    <td>${esc(r.director)}</td>
+    <td>${contactCell(r)}</td>
+    <td class="ts">${esc(ts.t)}<i>${esc(ts.d)}</i></td>
+    <td>${pill(r.status)}</td>
+    <td><div class="acts">
+      ${r.status==="waiting" ? `<button class="btn btn--ok btn--sm" data-act="invite" data-ref="${esc(r.ref)}">Inviter</button>` : ""}
+      <button class="btn btn--ghost btn--sm" data-act="wstatus" data-ref="${esc(r.ref)}">Changer le statut</button>
+    </div></td>
+  </tr>`;
+}
+
+/* ── modal ───────────────────────────────────────────────────────────────── */
+function modal({ title, body, confirm, danger, onConfirm }){
+  const host = $("#modalHost");
+  host.innerHTML = `<div class="mask"><div class="modal" role="dialog" aria-modal="true">
+    <h3>${esc(title)}</h3>${body}
+    <div class="row">
+      <button class="btn btn--ghost" data-x="cancel" type="button">Annuler</button>
+      <button class="btn ${danger?"btn--bad":"btn--gold"}" data-x="ok" type="button">${esc(confirm)}</button>
+    </div></div></div>`;
+  const close = () => { host.innerHTML = ""; document.removeEventListener("keydown", onKey); };
+  const onKey = e => { if (e.key === "Escape") close(); };
+  document.addEventListener("keydown", onKey);
+  host.querySelector('[data-x="cancel"]').onclick = close;
+  host.querySelector(".mask").onclick = e => { if (e.target.classList.contains("mask")) close(); };
+  host.querySelector('[data-x="ok"]').onclick = async () => {
+    const btn = host.querySelector('[data-x="ok"]');
+    btn.disabled = true; btn.textContent = "…";
+    try { await onConfirm(host); close(); loadStats(); load(); }
+    catch (e){ btn.disabled = false; btn.textContent = confirm; toast(e.message); }
+  };
+  host.querySelector("input,select,textarea")?.focus();
+}
+
+function askApprove(r){
+  modal({
+    title:"Confirmer l'avance reçue",
+    body:`<p>Confirmer que l'avance de 500 DT a bien été encaissée pour
+            <b>${esc(r.school)}</b>.<br>
+            L'école recevra automatiquement son reçu et la Charte d'honneur par e-mail.</p>
+          <div class="field"><label for="dref">Référence du règlement (facultatif)</label>
+          <input type="text" id="dref" maxlength="80" placeholder="Chèque n° 4417 / virement du 12/10"></div>`,
+    confirm:"Confirmer la place",
+    onConfirm: async host => {
+      await api(`/registrations/${encodeURIComponent(r.ref)}/approve`, {
+        method:"POST", body: JSON.stringify({ depositRef: host.querySelector("#dref").value.trim() })
+      });
+      toast("Place confirmée, reçu envoyé.");
+    }
+  });
+}
+
+function askRelease(r){
+  modal({
+    title:"Libérer la place",
+    body:`<p><b>${esc(r.school)}</b> perdra sa place et son rang, et celle-ci
+            repassera immédiatement au pool des 150. Action irréversible.</p>
+          <div class="field"><label for="note">Motif (conservé dans l'historique)</label>
+          <input type="text" id="note" maxlength="300" placeholder="Désistement, avance non versée…"></div>`,
+    confirm:"Libérer la place", danger:true,
+    onConfirm: async host => {
+      await api(`/registrations/${encodeURIComponent(r.ref)}/release`, {
+        method:"POST", body: JSON.stringify({ status:"cancelled", note: host.querySelector("#note").value.trim() })
+      });
+      toast("Place libérée.");
+    }
+  });
+}
+
+async function doResend(r){
+  try { await api(`/registrations/${encodeURIComponent(r.ref)}/resend`, { method:"POST" });
+        toast("E-mail renvoyé."); }
+  catch (e){ if (e.message !== "unauthorised") toast(e.message); }
+}
+
+function askInvite(r){
+  modal({
+    title:"Inviter cette école",
+    body:`<p>Marquer <b>${esc(r.school)}</b> comme invitée à prendre une place libérée.
+            Pensez à l'appeler : le statut ne déclenche aucun e-mail automatique.</p>
+          <div class="field"><label for="note">Note</label>
+          <input type="text" id="note" maxlength="300" placeholder="Appelée le 12/10, carnet réservé"></div>`,
+    confirm:"Marquer invitée",
+    onConfirm: async host => {
+      await api(`/waitlist/${encodeURIComponent(r.ref)}/invite`, {
+        method:"POST", body: JSON.stringify({ note: host.querySelector("#note").value.trim() })
+      });
+      toast("Marquée invitée.");
+    }
+  });
+}
+
+function askWlStatus(r){
+  modal({
+    title:"Changer le statut",
+    body:`<p>École : <b>${esc(r.school)}</b></p>
+          <div class="field"><label for="st">Nouveau statut</label>
+          <select id="st">${STATUS_OPTS.wl.map(s=>`<option value="${s}"${s===r.status?" selected":""}>${esc(STATUS_FR[s])}</option>`).join("")}</select></div>
+          <div class="field"><label for="note">Note</label>
+          <input type="text" id="note" maxlength="300"></div>`,
+    confirm:"Enregistrer",
+    onConfirm: async host => {
+      await api(`/waitlist/${encodeURIComponent(r.ref)}/status`, {
+        method:"POST", body: JSON.stringify({
+          status: host.querySelector("#st").value, note: host.querySelector("#note").value.trim() })
+      });
+      toast("Statut mis à jour.");
+    }
+  });
+}
+
+/* ── lock / reconcile / export ───────────────────────────────────────────── */
+$("#btnLock").addEventListener("click", () => {
+  const closing = !LOCKED;
+  modal({
+    title: closing ? "Fermer les inscriptions" : "Rouvrir les inscriptions",
+    body: closing
+      ? `<p>Le formulaire public sera immédiatement remplacé par la liste
+           d'attente, même si les 150 places ne sont pas toutes prises.</p>`
+      : `<p>Le formulaire public redeviendra accessible, dans la limite des
+           places restantes.</p>`,
+    confirm: closing ? "Fermer" : "Rouvrir", danger: closing,
+    onConfirm: async () => {
+      await api("/lock", { method:"POST", body: JSON.stringify({ locked: closing }) });
+      toast(closing ? "Inscriptions fermées." : "Inscriptions rouvertes.");
+    }
+  });
+});
+
+$("#btnReconcile").addEventListener("click", () => {
+  modal({
+    title:"Recalculer le compteur",
+    body:`<p>Recompte les places occupées directement à partir des inscriptions.
+            À utiliser si le compteur semble décalé après un incident serveur.</p>`,
+    confirm:"Recalculer",
+    onConfirm: async () => {
+      const r = await api("/reconcile", { method:"POST" });
+      toast(r.drift ? `Écart de ${r.drift} corrigé.` : "Aucun écart détecté.");
+    }
+  });
+});
+
+/* CSV needs the Authorization header, so it cannot be a plain link. */
+$("#btnCsv").addEventListener("click", async () => {
+  const path = TAB === "reg" ? "/export.csv" : "/waitlist.csv";
+  try {
+    const r = await fetch(`${API_BASE}/api/admin${path}`, { headers:{ authorization:`Bearer ${TOKEN}` }});
+    if (r.status === 401) return logout("Session expirée. Reconnectez-vous.");
+    if (!r.ok) throw new Error(`Erreur ${r.status}`);
+    const blob = await r.blob();
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = TAB === "reg" ? "fiestadream-inscriptions.csv" : "fiestadream-liste-attente.csv";
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(()=>URL.revokeObjectURL(a.href), 4000);
+    toast("Export téléchargé.");
+  } catch (e){ toast(e.message); }
+});
+
+/* ── toast ───────────────────────────────────────────────────────────────── */
+let toastTimer;
+function toast(msg){
+  const el = $("#toast");
+  el.firstElementChild.textContent = msg;
+  el.hidden = false;
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(()=>{ el.hidden = true; }, 3400);
+}
+
+/* ── boot ────────────────────────────────────────────────────────────────── */
+let poll;
+async function boot(){
+  try {
+    ME = ME || await api("/me");
+    $("#who").textContent = `${ME.name || ME.username} (${ME.role})`;
+    $("#login").hidden = true; $("#app").hidden = false;
+    syncStatusFilter();
+    await loadStats(); await load();
+    clearInterval(poll);
+    poll = setInterval(() => { if (!document.hidden){ loadStats(); load(); } }, 45000);
+  } catch (e){
+    if (e.message !== "unauthorised") { logout(); }
+  }
+}
+
+if (TOKEN) boot(); else { $("#login").hidden = false; }
+</script>
+</body>
+</html>

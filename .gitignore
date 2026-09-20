@@ -1,0 +1,37 @@
+# ═══════════════════════════════════════════════════════════════════════════
+#  SECRETS — never commit these.
+#  backend/.env holds the MongoDB Atlas password, the JWT signing key and the
+#  SMTP password for contact@bellaqueenfestival.tn.
+#  If any of them ever land in a commit, they are considered LEAKED: rotate
+#  every value, because git history keeps them forever.
+# ═══════════════════════════════════════════════════════════════════════════
+.env
+.env.*
+!.env.example
+**/.env
+**/.env.*
+!**/.env.example
+
+# Dependencies
+node_modules/
+package-lock.json
+
+# Logs / runtime
+*.log
+npm-debug.log*
+logs/
+pids/
+*.pid
+
+# Database dumps and exports (contain directors' names, phones, e-mails)
+dump/
+*.bson
+*.csv
+!**/example*.csv
+
+# Editors / OS
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.swp

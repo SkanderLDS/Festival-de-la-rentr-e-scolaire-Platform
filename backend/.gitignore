@@ -1,0 +1,19 @@
+# Secrets — SMTP password, JWT signing key, Mongo URI with credentials.
+# Never commit this. If it ever lands in a commit, rotate every value in it.
+.env
+.env.*
+!.env.example
+
+node_modules/
+npm-debug.log*
+*.log
+logs/
+
+# Local data / dumps
+dump/
+*.bson
+*.csv
+
+.DS_Store
+.vscode/
+.idea/
