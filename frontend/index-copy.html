@@ -233,17 +233,6 @@ input:focus,select:focus{box-shadow:0 0 0 4px color-mix(in srgb,var(--gold) 22%,
   .btn--gold::after{display:none}
 }
 
-/* ============================================================ MAIL FIX */
-/* "Did you mean gmail.com?" — non-blocking, dismiss-by-ignoring. The lookup
-   endpoint matches on ref + e-mail, so a mistyped domain otherwise means the
-   confirmation never arrives AND the director can't find their own record
-   afterwards, on the one morning they're moving fastest. */
-.fixmail{display:none;margin-top:.4rem;background:none;border:0;padding:0;
-  font-size:.83rem;font-weight:700;color:var(--gold);text-decoration:underline;
-  text-underline-offset:3px;cursor:pointer;text-align:start}
-.fixmail:not([hidden]){display:inline-block}
-.fixmail:hover{color:var(--gold-lit)}
-
 /* ============================================================ HEADER */
 .hdr{position:sticky;top:0;z-index:60;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
 .hdr__in{display:flex;align-items:center;gap:1rem;min-height:66px}
@@ -461,7 +450,6 @@ input[aria-invalid="true"],select[aria-invalid="true"]{border-color:#D63A3A}
 .check{display:flex;gap:.7rem;align-items:flex-start;padding:.9rem 1rem;border:1.5px solid var(--line-strong);border-radius:var(--r-s);background:var(--bg)}
 .check input{width:20px;height:20px;flex:none;margin-top:.15rem;accent-color:var(--gold)}
 .check label{font-size:.88rem;line-height:1.5;font-weight:500;margin:0}
-.charte-link{display:inline-block;margin-top:.3rem;font-size:.8rem;font-weight:700;color:var(--gold);text-decoration:underline;text-underline-offset:3px}
 .daypick{border-radius:var(--r-m);padding:1rem;border:1.5px solid var(--line);background:var(--surface-2);display:flex;gap:.85rem;align-items:center;transition:border-color .2s ease,background .2s ease}
 .daypick[data-on="1"]{border-color:var(--c);background:color-mix(in srgb,var(--c) 12%,transparent)}
 .daypick__swatch{width:42px;height:42px;border-radius:10px;flex:none;background:var(--c,var(--surface-2));border:1px solid var(--line);transition:background .2s ease}
@@ -523,21 +511,6 @@ input[aria-invalid="true"],select[aria-invalid="true"]{border-color:#D63A3A}
 .wlok__pos{font-family:var(--f-mono);font-size:clamp(2.2rem,8vw,3.2rem);font-weight:700;color:var(--gold);line-height:1}
 .wlok__pos small{display:block;font-family:var(--f-ui);font-size:.72rem;color:var(--text-3);font-weight:700;letter-spacing:.04em}
 
-/* ============================================================ LOOKUP */
-.look{display:grid;gap:clamp(1.3rem,3.5vw,2.2rem);grid-template-columns:1fr;align-items:start}
-@media (min-width:900px){.look{grid-template-columns:1fr 1.1fr}}
-.look__form .fgrid{grid-template-columns:1fr}
-.look__hint{font-size:.82rem;color:var(--text-3);margin-top:.9rem;line-height:1.6}
-.look__hint b{font-family:var(--f-mono);color:var(--text-2);font-weight:600}
-.card--ticket{--c:var(--gold);border-radius:var(--r-l);overflow:hidden;border:1px solid var(--line);background:var(--surface)}
-.card--ticket .tk__band{background:var(--c);color:#fff;padding:1.05rem 1.3rem;display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap}
-.card--ticket .tk__band b{font-family:var(--f-display);font-size:1.15rem;font-weight:800}
-.card--ticket .tk__band span{font-family:var(--f-mono);font-size:.8rem;font-weight:700;background:rgba(0,0,0,.2);padding:.25rem .6rem;border-radius:999px}
-.card--ticket .tk__body{padding:1.3rem}
-.tk__school{font-family:var(--f-display);font-size:1.2rem;font-weight:800;margin-bottom:.9rem;line-height:1.3}
-.look__empty{border:1.5px dashed var(--line-strong);border-radius:var(--r-l);padding:2.4rem 1.4rem;text-align:center;color:var(--text-3)}
-.look__empty svg{width:40px;height:40px;margin:0 auto .8rem;color:var(--gold);opacity:.7}
-
 /* ============================================================ BOARD */
 .tabs{display:flex;gap:.45rem;overflow-x:auto;padding-bottom:.4rem;margin-bottom:1.1rem;scrollbar-width:none}
 .tabs::-webkit-scrollbar{display:none}
@@ -594,9 +567,6 @@ details p{padding-bottom:1.2rem;color:var(--text-2);font-size:.94rem;max-width:7
 .ftr a:hover{color:var(--gold-lit)}
 .ftr__org{font-size:.86rem;line-height:1.75;margin-top:.9rem}
 .ftr__org b{color:#F2ECDD}
-.ftr__links{display:flex;gap:1.1rem;flex-wrap:wrap}
-.ftr__links a{display:inline;padding:0;font-size:.8rem;color:#8C82A8;text-decoration:underline;text-underline-offset:3px}
-.ftr__links a:hover{color:var(--gold-lit)}
 .ftr__legal{margin-top:2.2rem;padding-top:1.4rem;border-top:1px solid rgba(247,242,230,.14);font-size:.8rem;color:#8C82A8;display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap}
 
 .dev{position:fixed;inset-block-end:0;inset-inline:0;z-index:80;background:#0C0720;color:#C6BDDE;border-top:2px solid var(--gold);font-size:.8rem}
@@ -622,7 +592,6 @@ details p{padding-bottom:1.2rem;color:var(--text-2);font-size:.94rem;max-width:7
       <a href="#dubai" data-i18n="navImpact">Dubaï</a>
       <a href="#pass" data-i18n="navPass">Pass Voyage</a>
       <a href="#classement" data-i18n="navBoard">Les inscrites</a>
-      <a href="#suivi" data-i18n="navLook">Mon inscription</a>
       <a href="#certificat" data-i18n="navCert">Certificat</a>
     </nav>
     <div class="hdr__tools">
@@ -968,9 +937,7 @@ details p{padding-bottom:1.2rem;color:var(--text-2);font-size:.94rem;max-width:7
             </div>
             <div class="field f--full">
               <label for="fMail"><span data-i18n="lMail">Adresse e-mail de l'établissement</span> <span class="req">*</span></label>
-              <input type="email" id="fMail" autocomplete="email" required>
-              <button type="button" class="fixmail" id="fMailFix" hidden></button>
-              <span class="err" id="eMail"></span>
+              <input type="email" id="fMail" autocomplete="email" required><span class="err" id="eMail"></span>
               <div class="langnote">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>
                 <span id="langNote"></span>
@@ -979,8 +946,7 @@ details p{padding-bottom:1.2rem;color:var(--text-2);font-size:.94rem;max-width:7
             <div class="f--full">
               <div class="check">
                 <input type="checkbox" id="fCharte" required>
-                <label for="fCharte"><span data-i18n="lCharte">J'adhère à la Charte d'honneur et de solidarité éducative et j'inscris volontairement mon établissement au festival.</span>
-                  <a href="legal.html#charte" target="_blank" rel="noopener" class="charte-link" data-i18n="readCharte">Lire la Charte</a></label>
+                <label for="fCharte" data-i18n="lCharte">J'adhère à la Charte d'honneur et de solidarité éducative et j'inscris volontairement mon établissement au festival.</label>
               </div>
               <span class="err" id="eCharte"></span>
             </div>
@@ -1047,9 +1013,7 @@ details p{padding-bottom:1.2rem;color:var(--text-2);font-size:.94rem;max-width:7
               </div>
               <div class="field f--full">
                 <label for="wMail"><span data-i18n="lMail">Adresse e-mail de l'établissement</span> <span class="req">*</span></label>
-                <input type="email" id="wMail" autocomplete="email" required>
-                <button type="button" class="fixmail" id="wMailFix" hidden></button>
-                <span class="err" id="weMail"></span>
+                <input type="email" id="wMail" autocomplete="email" required><span class="err" id="weMail"></span>
               </div>
               <div class="hp" aria-hidden="true">
                 <label for="wWebsite">Website</label>
@@ -1089,41 +1053,6 @@ details p{padding-bottom:1.2rem;color:var(--text-2);font-size:.94rem;max-width:7
         </table>
       </div>
       <div class="board__foot"><span id="boardCount"></span><button class="linkbtn" id="boardMore" type="button">Afficher tout</button></div>
-    </div>
-  </div>
-</section>
-
-<section class="band" id="suivi">
-  <div class="wrap">
-    <div class="sec-head">
-      <span class="kicker" data-i18n="kLook">Votre inscription</span>
-      <h2 data-i18n="lookH2">Retrouver votre carte de réservation</h2>
-      <p class="lede" data-i18n="lookLede">Saisissez la référence reçue par e-mail et l'adresse utilisée lors de l'inscription pour afficher votre statut, votre journée et votre rang.</p>
-    </div>
-    <div class="look">
-      <form class="card look__form" id="lookForm" novalidate>
-        <div class="fgrid">
-          <div class="field">
-            <label for="lRef"><span data-i18n="lRef">Référence</span> <span class="req">*</span></label>
-            <input type="text" id="lRef" autocomplete="off" autocapitalize="characters" spellcheck="false"
-                   placeholder="BQF-2026-000042" maxlength="16" style="font-family:var(--f-mono)">
-          </div>
-          <div class="field">
-            <label for="lMail"><span data-i18n="lMail">Adresse e-mail de l'établissement</span> <span class="req">*</span></label>
-            <input type="email" id="lMail" autocomplete="email">
-            <button type="button" class="fixmail" id="lMailFix" hidden></button>
-            <span class="err" id="lErr" role="alert"></span>
-          </div>
-          <button class="btn btn--gold" type="submit" id="lBtn" style="width:100%" data-i18n="lookBtn">Afficher ma carte</button>
-        </div>
-        <p class="look__hint" data-i18n="lookHint">La référence commence par <b>BQF-</b> pour une inscription, ou par <b>WL-</b> pour la liste d'attente.</p>
-      </form>
-      <div id="lookOut">
-        <div class="look__empty">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M3 10h18M7 15h4"/></svg>
-          <p data-i18n="lookEmpty">Votre carte s'affichera ici.</p>
-        </div>
-      </div>
     </div>
   </div>
 </section>
@@ -1203,11 +1132,7 @@ details p{padding-bottom:1.2rem;color:var(--text-2);font-size:.94rem;max-width:7
       </div>
     </div>
     <p class="credit" data-i18n="credit">Photographies de la Cité des Sciences de Tunis : © l’organisation du festival.</p>
-    <div class="ftr__legal"><span>© 2026 FIESTADREAM · Bella Queen Festival</span><span class="ftr__links">
-        <a href="legal.html#charte" data-i18n="lnkCharte">Charte d'honneur</a>
-        <a href="legal.html#confidentialite" data-i18n="lnkPriv">Confidentialité</a>
-        <a href="legal.html#mentions" data-i18n="lnkLegal">Mentions légales</a>
-      </span></div>
+    <div class="ftr__legal"><span>© 2026 FIESTADREAM · Bella Queen Festival</span><span data-i18n="ftrLegal">Charte d'honneur · Confidentialité · Mentions légales</span></div>
   </div>
 </footer>
 
@@ -1331,16 +1256,6 @@ fr:{
   boardCount:(n,g)=> n===0 ? `Aucune école inscrite à ${g}` : `${n} école${n>1?"s":""} inscrite${n>1?"s":""} à ${g}`,
   emptyB:"La première place est libre",
   emptyP:"Aucune école de ce gouvernorat ne s'est encore inscrite. La première à le faire recevra l'Ordre du Don et de l'Excellence Éducative Humanitaire.",
-  navLook:"Mon inscription", kLook:"Votre inscription", lookH2:"Retrouver votre carte de réservation",
-  lookLede:"Saisissez la référence reçue par e-mail et l'adresse utilisée lors de l'inscription pour afficher votre statut, votre journée et votre rang.",
-  lRef:"Référence", lookBtn:"Afficher ma carte", lookEmpty:"Votre carte s'affichera ici.",
-  lookHint:"La référence commence par <b>BQF-</b> pour une inscription, ou par <b>WL-</b> pour la liste d'attente.",
-  lookMiss:"Aucune inscription ne correspond à cette référence et à cette adresse.",
-  lookBadRef:"Référence invalide. Format attendu : BQF-2026-000042.",
-  lookWait:"En file d'attente", lookPosition:"Position dans la file",
-  lookApproved:"Place confirmée le", lookDeadline:"Avance à verser avant le",
-  lnkCharte:"Charte d'honneur", lnkPriv:"Confidentialité", lnkLegal:"Mentions légales",
-  readCharte:"Lire la Charte",
   kCert:"Après le festival", certH2:"Le certificat de votre enfant",
   certLede:"À partir du 1ᵉʳ novembre 2026, chaque parent saisit le prénom de son enfant et télécharge son certificat de Chevalier de l'Espoir en haute définition, prêt à partager.",
   certLocked:"Disponible le 1ᵉʳ novembre 2026", certUnlocked:"Téléchargement ouvert",
@@ -1388,7 +1303,6 @@ contact@bellaqueenfestival.tn`,
   errValidation:"Vérifiez les champs signalés.",
   errRate:"Trop de tentatives. Patientez une minute.",
   errNetwork:"Connexion au serveur impossible. Réessayez dans un instant.",
-  didYouMean:"Vouliez-vous dire {email} ?",
   faq:[
     ["Comment mon rang est-il calculé exactement ?","Le serveur enregistre l'instant précis où votre formulaire lui parvient, à la milliseconde. Les écoles sont triées par ordre croissant de cet instant, à l'intérieur de leur gouvernorat uniquement. En cas d'égalité à la milliseconde, c'est le numéro de séquence attribué par la base de données qui départage."],
     ["Puis-je choisir ma journée ?","Non. La journée découle du gouvernorat : Tunis le mercredi 28, Ariana le jeudi 29, Manouba le vendredi 30, Ben Arous le samedi 31 octobre. Cette sectorisation protège la jauge quotidienne de 2 000 sièges du Grand Cirque Paparouni."],
@@ -1397,7 +1311,7 @@ contact@bellaqueenfestival.tn`,
     ["Recevons-nous quelque chose si nous ne sommes pas premiers ?","Oui. Les 150 écoles participantes montent sur la grande scène pour recevoir le Trophée FIESTADREAM 2026. Seul l'Ordre du Don et de l'Excellence Éducative Humanitaire est réservé à la première école de chaque gouvernorat."],
     ["Mon école compte plus de 50 élèves. Puis-je prendre deux carnets ?","Oui, dans la limite des places restantes de votre journée. Le solde en temps réel est affiché dans la section Pass Voyage."],
     ["Qui organise le festival ?","FIESTADREAM est fondé par M. Rafik Nour Ben Kilani et organisé par l'Association Enfants de Tunisie, avec l'agence déléguée Hosni's Events. 100 % des bénéfices vont à la protection de l'enfance et à l'harmonie familiale."],
-    ["Que deviennent les données que je transmets ?","Elles servent uniquement à organiser le festival et à remettre les carnets. Seule l'équipe d'organisation y a accès : le classement public n'affiche que le nom de l'établissement, jamais le responsable, le téléphone ou l'e-mail. Le détail figure dans notre politique de confidentialité."]
+    ["Que deviennent les données que je transmets ?","Elles servent uniquement à l'organisation du festival et à la remise des carnets. Le traitement est déclaré auprès de l'Instance Nationale de Protection des Données Personnelles."]
   ]
 },
 ar:{
@@ -1484,16 +1398,6 @@ ar:{
   boardCount:(n,g)=> n===0 ? `لا توجد مدرسة مسجّلة في ${g}` : `${n} مدرسة مسجّلة في ${g}`,
   emptyB:"المرتبة الأولى شاغرة",
   emptyP:"لم تسجّل بعد أي مدرسة من هذه الولاية. وأول من تفعل ستنال وسام العطاء والتميّز التربوي الإنساني.",
-  navLook:"تسجيلي", kLook:"تسجيلكم", lookH2:"استرجاع بطاقة الحجز",
-  lookLede:"أدخلوا المرجع الذي وصلكم عبر البريد الإلكتروني والعنوان المستعمل عند التسجيل لعرض حالتكم ويومكم ورتبتكم.",
-  lRef:"المرجع", lookBtn:"عرض بطاقتي", lookEmpty:"ستظهر بطاقتكم هنا.",
-  lookHint:"يبدأ المرجع بـ <b>BQF-</b> للتسجيل، أو بـ <b>WL-</b> لقائمة الانتظار.",
-  lookMiss:"لا يوجد تسجيل يطابق هذا المرجع وهذا العنوان.",
-  lookBadRef:"مرجع غير صالح. الصيغة المنتظرة: BQF-2026-000042.",
-  lookWait:"في قائمة الانتظار", lookPosition:"الموقع في الصف",
-  lookApproved:"تأكّد المقعد في", lookDeadline:"تُدفع التسبقة قبل",
-  lnkCharte:"ميثاق الشرف", lnkPriv:"الخصوصية", lnkLegal:"المعطيات القانونية",
-  readCharte:"قراءة الميثاق",
   kCert:"بعد المهرجان", certH2:"شهادة طفلكم",
   certLede:"ابتداءً من غرة نوفمبر 2026، يُدخل كل وليّ اسم طفله ويحمّل شهادة فارس الأمل بجودة عالية، جاهزة للمشاركة.",
   certLocked:"متاحة يوم 1 نوفمبر 2026", certUnlocked:"التحميل مفتوح",
@@ -1541,7 +1445,6 @@ contact@bellaqueenfestival.tn`,
   errValidation:"يرجى مراجعة الحقول المُشار إليها.",
   errRate:"محاولات كثيرة. انتظروا دقيقة.",
   errNetwork:"تعذّر الاتصال بالخادم. أعيدوا المحاولة بعد قليل.",
-  didYouMean:"هل تقصدون {email}؟",
   faq:[
     ["كيف تُحتسب رتبتي بالضبط؟","يسجّل الخادم اللحظة الدقيقة لوصول استمارتكم إليه، بالملي ثانية. وتُرتَّب المدارس تصاعدياً حسب هذه اللحظة، وداخل ولايتها فقط. وعند التساوي في الملي ثانية، يفصل رقم التسلسل الذي تمنحه قاعدة البيانات."],
     ["هل يمكنني اختيار يومي؟","لا. اليوم ينبع من الولاية: تونس الأربعاء 28، أريانة الخميس 29، منوبة الجمعة 30، بن عروس السبت 31 أكتوبر. هذا التقسيم يحمي طاقة استيعاب سيرك باباروني البالغة 2000 مقعد يومياً."],
@@ -1550,7 +1453,7 @@ contact@bellaqueenfestival.tn`,
     ["هل ننال شيئاً إن لم نكن الأوائل؟","نعم. المدارس الـ150 المشاركة تعتلي المنصة الكبرى لتسلّم درع فييستادريم 2026. ولا يُخصَّص لأول مدرسة في كل ولاية سوى وسام العطاء والتميّز التربوي الإنساني."],
     ["مدرستي تضمّ أكثر من 50 تلميذاً. هل آخذ دفترين؟","نعم، في حدود المقاعد المتبقية ليومكم. والرصيد المباشر معروض في قسم جواز السفر."],
     ["من ينظّم المهرجان؟","فييستادريم من تأسيس الأستاذ رفيق نور بن الكيلاني، وتنظيم جمعية أطفال تونس بالتعاون مع الوكالة المنتدبة Hosni's Events. و100% من الريع يذهب لحماية الطفولة وتماسك الأسرة."],
-    ["ما مصير المعطيات التي أرسلها؟","تُستعمل حصرياً لتنظيم المهرجان وتسليم الدفاتر. ولا يطّلع عليها سوى فريق التنظيم: فالترتيب العلني لا يُظهر سوى اسم المؤسسة، ولا يُظهر أبداً اسم المسؤول أو الهاتف أو البريد الإلكتروني. والتفاصيل مبيّنة في سياسة الخصوصية."]
+    ["ما مصير المعطيات التي أرسلها؟","تُستعمل حصرياً لتنظيم المهرجان وتسليم الدفاتر. والمعالجة مصرَّح بها لدى الهيئة الوطنية لحماية المعطيات الشخصية."]
   ]
 }};
 
@@ -1648,18 +1551,6 @@ const API = (() => {
         } catch {
           return { ok:false, error:"errNetwork" };
         }
-      },
-      async lookup(ref, email){
-        try {
-          const r = await fetch(`${API_BASE}/api/lookup`, {
-            method:"POST", headers:{ "content-type":"application/json" },
-            body: JSON.stringify({ ref, email })
-          });
-          const body = await r.json().catch(()=>({}));
-          if (r.status === 404) return { ok:false, error:"lookMiss" };
-          if (!r.ok) return { ok:false, error: mapError(body.code) };
-          return { ok:true, data: body.data };
-        } catch { return { ok:false, error:"errNetwork" }; }
       },
       async joinWaitlist(p){
         try {
@@ -1761,22 +1652,6 @@ const API = (() => {
           seats: used+50<=CONFIG.MAX_SEATS_PER_DAY?50:0 });
       }
       persist();
-    },
-    lookup(ref, email){
-      const em = String(email).toLowerCase();
-      const r = state.rows.find(x => x.ref === ref && String(x.email||"").toLowerCase() === em);
-      if (r){
-        const rank = build().govs[r.gov].board.findIndex(b => b.ref === r.ref) + 1;
-        return { ok:true, data:{ kind:"registration", ref:r.ref, school:r.school, gov:r.gov,
-          status:r.status, rank, seats:r.seats, registeredAt:new Date(r.ts).toISOString(),
-          approvedAt:null, pendingTtlHours:72 }};
-      }
-      const w = state.wait.find(x => x.ref === ref && String(x.email||"").toLowerCase() === em);
-      if (w){
-        return { ok:true, data:{ kind:"waitlist", ref:w.ref, school:w.school, gov:w.gov,
-          status:"waiting", rank: state.wait.indexOf(w) + 1, joinedAt:new Date(w.joinedAt).toISOString() }};
-      }
-      return { ok:false, error:"lookMiss" };
     },
     joinWaitlist(p){
       if (p.website) return { ok:false, error:"errBot" };
@@ -2092,141 +1967,6 @@ function showWaitReceipt(w){
   </div>`;
   $("#waitDone").scrollIntoView({behavior:"smooth", block:"center"});
 }
-
-/* -------------------------------------------------------------- lookup --- */
-/* Spec section 5: a school must be able to see its colour-coded card again
-   after closing the tab. Reference AND e-mail — see the server comment on
-   POST /api/lookup for why a reference alone would leak the waiting list. */
-const REF_RX = /^(BQF|WL)-\d{4}-\d{6}$/;
-
-$("#lRef")?.addEventListener("input", e => {
-  e.target.value = e.target.value.toUpperCase().replace(/[^A-Z0-9-]/g, "").slice(0, 16);
-});
-
-$("#lookForm")?.addEventListener("submit", async e => {
-  e.preventDefault();
-  const ref = $("#lRef").value.trim().toUpperCase();
-  const email = $("#lMail").value.trim().toLowerCase();
-  const err = $("#lErr");
-  err.textContent = "";
-  if (!REF_RX.test(ref)) { err.textContent = t("lookBadRef"); return; }
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) { err.textContent = t("errMail"); return; }
-
-  const btn = $("#lBtn");
-  btn.disabled = true; btn.textContent = t("sending");
-  try {
-    const res = await API.lookup(ref, email);
-    if (!res.ok) { err.textContent = t(res.error); return; }
-    renderLookup(res.data);
-  } catch {
-    err.textContent = t("errNetwork");
-  } finally {
-    btn.disabled = false; btn.textContent = t("lookBtn");
-  }
-});
-
-function renderLookup(d){
-  const g = GOV[d.gov];
-  const isWl = d.kind === "waitlist";
-  const stamp = fmtTs(Date.parse(isWl ? d.joinedAt : d.registeredAt));
-  const statusLabel = isWl ? t("lookWait")
-                    : d.status === "approved" ? t("stOk") : t("stPending");
-  const badge = isWl ? "badge--pending" : (d.status === "approved" ? "badge--ok" : "badge--pending");
-
-  let extra = "";
-  if (!isWl && d.status === "approved" && d.approvedAt){
-    const a = fmtTs(Date.parse(d.approvedAt));
-    extra = `<div class="rrow"><span>${esc(t("lookApproved"))}</span><b class="mono">${esc(a.date)}</b></div>`;
-  } else if (!isWl && d.status === "pending"){
-    const dl = fmtTs(Date.parse(d.registeredAt) + (d.pendingTtlHours || 72) * 3600000);
-    extra = `<div class="rrow"><span>${esc(t("lookDeadline"))}</span><b class="mono">${esc(dl.time.slice(0,5))} · ${esc(dl.date)}</b></div>`;
-  }
-
-  $("#lookOut").innerHTML = `<div class="card--ticket" style="--c:${isWl ? "var(--teal)" : g.color}">
-    <div class="tk__band"><b>${esc(isWl ? t("kWait") : govPass(d.gov))}</b><span>${esc(d.ref)}</span></div>
-    <div class="tk__body">
-      <div class="tk__school" dir="auto">${esc(d.school)}</div>
-      <div class="rrow"><span>${esc(t("recStatus"))}</span><b><span class="badge ${badge}">${esc(statusLabel)}</span></b></div>
-      ${d.rank ? `<div class="rrow"><span>${esc(isWl ? t("lookPosition") : t("recRank"))}</span><b class="mono">${String(d.rank).padStart(2,"0")}</b></div>` : ""}
-      <div class="rrow"><span>${esc(t("recDay"))}</span><b>${esc(govDay(d.gov))}</b></div>
-      ${!isWl ? `<div class="rrow"><span>${esc(t("recSeats"))}</span><b class="mono">${Number(d.seats)||0}</b></div>` : ""}
-      <div class="rrow"><span>${esc(t("recTs"))}</span><b class="mono">${esc(stamp.time)} · ${esc(stamp.date)}</b></div>
-      ${extra}
-    </div>
-  </div>`;
-}
-
-/* ------------------------------------------------------- mail typo-fix --- */
-/* Common consumer webmail and the ISPs Tunisian schools actually use. Kept
-   short on purpose: the goal is catching real slips, not second-guessing
-   every school's own custom domain. */
-const COMMON_MAIL_DOMAINS = [
-  "gmail.com","yahoo.com","yahoo.fr","hotmail.com","hotmail.fr",
-  "outlook.com","outlook.fr","live.com","live.fr","icloud.com","msn.com","aol.com",
-  "topnet.tn","planet.tn","gnet.tn","orange.tn"
-];
-
-function levenshtein(a, b){
-  const m = a.length, n = b.length;
-  if (!m) return n; if (!n) return m;
-  let prev = Array.from({length:n+1}, (_,i)=>i);
-  for (let i=1;i<=m;i++){
-    const cur=[i];
-    for (let j=1;j<=n;j++) cur[j] = a[i-1]===b[j-1] ? prev[j-1] : 1+Math.min(prev[j-1],prev[j],cur[j-1]);
-    prev = cur;
-  }
-  return prev[n];
-}
-
-/** Returns a corrected e-mail if the domain looks like a near-miss of a known
- *  one, else null. Ratio-gated so short/unrelated domains (a school's own
- *  ".tn" address, say) don't get flagged just for sharing a few letters. */
-function domainSuggestion(email){
-  const at = email.lastIndexOf("@");
-  if (at < 1 || at === email.length-1) return null;
-  const domain = email.slice(at+1).trim().toLowerCase();
-  if (!domain || !domain.includes(".")) return null;
-  if (COMMON_MAIL_DOMAINS.includes(domain)) return null;
-
-  let best = null, bestDist = Infinity;
-  for (const known of COMMON_MAIL_DOMAINS){
-    const d = levenshtein(domain, known);
-    if (d < bestDist){ bestDist = d; best = known; }
-  }
-  if (!best) return null;
-  const ratio = bestDist / Math.max(domain.length, best.length);
-  if (bestDist > 0 && bestDist <= 2 && ratio <= 0.3){
-    return email.slice(0, at+1) + best;
-  }
-  return null;
-}
-
-/** Wires one e-mail input to its own "did you mean" button. Checked on blur
- *  (not on every keystroke, which would flash suggestions mid-typing) and
- *  hidden again the moment the field is edited. */
-function wireMailFix(inputSel, btnSel){
-  const input = $(inputSel), btn = $(btnSel);
-  if (!input || !btn) return;
-  input.addEventListener("blur", () => {
-    const fix = domainSuggestion(input.value.trim());
-    if (fix){
-      btn.textContent = t("didYouMean").replace("{email}", fix);
-      btn.dataset.fix = fix;
-      btn.hidden = false;
-    } else {
-      btn.hidden = true;
-    }
-  });
-  input.addEventListener("input", () => { btn.hidden = true; });
-  btn.addEventListener("click", () => {
-    input.value = btn.dataset.fix || input.value;
-    btn.hidden = true;
-    input.focus();
-  });
-}
-wireMailFix("#fMail", "#fMailFix");
-wireMailFix("#wMail", "#wMailFix");
-wireMailFix("#lMail", "#lMailFix");
 
 /* ---------------------------------------------------------------- film --- */
 /* preload="none" plus IntersectionObserver: the clip costs nothing until the
