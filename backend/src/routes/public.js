@@ -11,9 +11,12 @@ const { config } = require('../config');
 
 const router = express.Router();
 
-/* One school per minute per IP is generous for a real director and useless
-   for a script. The 150-cap is enforced in Mongo regardless — this only keeps
-   junk off the write path. */
+/* 8 per minute per IP. Deliberately loose: several Tunisian schools can sit
+   behind one carrier-grade NAT address, and a tight per-IP limit would have
+   them locking each other out on registration morning. The real protection is
+   the honeypot + minimum fill time in antiBot, the unique-school index, and
+   the atomic 150-cap in Mongo. This limiter only keeps bulk junk off the
+   write path. */
 const registerLimiter = rateLimit({
   windowMs: 60 * 1000, max: 8,
   standardHeaders: true, legacyHeaders: false,
@@ -158,22 +161,52 @@ router.post('/waitlist', registerLimiter, sanitize, antiBot, validateWaitlist, a
   } catch (err) { next(err); }
 });
 
-/* ── GET /api/registrations/:ref ───────────────────────────────────────────
-   A school checking its own status. Public-safe fields only.                */
-router.get('/registrations/:ref', lookupLimiter, async (req, res, next) => {
+/* ── POST /api/lookup ──────────────────────────────────────────────────────
+   A school retrieving its own card after closing the tab (spec section 5).
+
+   Reference AND e-mail, not reference alone. References are sequential, so a
+   ref-only lookup is enumerable — harmless for registrations, whose data is on
+   the public leaderboard anyway, but a real leak for the waiting list, whose
+   membership is private. The director holds both values; nobody else does.
+
+   POST, so the e-mail never appears in a URL, a proxy log or browser history.
+   Every miss returns the SAME response whether the reference or the e-mail was
+   wrong, so the endpoint cannot be used to confirm that a reference exists.  */
+const REF_RX = /^(BQF|WL)-\d{4}-\d{6}$/;
+const EMAIL_RX = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+
+router.post('/lookup', lookupLimiter, sanitize, async (req, res, next) => {
+  const miss = () => next(registry.appError('NOT_FOUND', 404,
+    'No registration matches this reference and e-mail address.'));
   try {
-    const doc = await Registration.findOne({ ref: req.params.ref, edition: registry.EDITION })
-      .select('ref school gov status registeredAt seats').lean();
-    if (!doc) return next(registry.appError('NOT_FOUND', 404, 'Unknown reference.'));
+    const ref = String(req.body?.ref || '').trim().toUpperCase();
+    const email = String(req.body?.email || '').trim().toLowerCase();
+    if (!REF_RX.test(ref) || !EMAIL_RX.test(email) || email.length > 160) return miss();
 
-    const board = registry.get()?.govs?.[doc.gov]?.board || [];
-    const rank = board.findIndex(r => r.ref === doc.ref) + 1;
+    if (ref.startsWith('BQF-')) {
+      const doc = await Registration.findOne({ ref, email, edition: registry.EDITION })
+        .select('ref school gov status registeredAt approvedAt seats lang').lean();
+      if (!doc) return miss();
+      const board = registry.get()?.govs?.[doc.gov]?.board || [];
+      const rank = board.findIndex(r => r.ref === doc.ref) + 1;
+      return res.json({ ok: true, data: {
+        kind: 'registration', ref: doc.ref, school: doc.school, gov: doc.gov,
+        status: doc.status, rank: rank || null, seats: doc.seats,
+        registeredAt: doc.registeredAt.toISOString(),
+        approvedAt: doc.approvedAt ? doc.approvedAt.toISOString() : null,
+        pendingTtlHours: config.edition.pendingTtlHours
+      }});
+    }
 
-    res.json({ ok: true, data: {
-      ref: doc.ref, school: doc.school, gov: doc.gov, status: doc.status,
-      seats: doc.seats, registeredAt: doc.registeredAt.toISOString(),
-      rank: rank || null
+    const doc = await Waitlist.findOne({ ref, email, edition: registry.EDITION })
+      .select('ref school gov status joinedAt position').lean();
+    if (!doc) return miss();
+    const rank = doc.status === 'waiting' ? await waitlist.rankOf(doc) : null;
+    return res.json({ ok: true, data: {
+      kind: 'waitlist', ref: doc.ref, school: doc.school, gov: doc.gov,
+      status: doc.status, rank, joinedAt: doc.joinedAt.toISOString()
     }});
+
   } catch (err) { next(err); }
 });
 
