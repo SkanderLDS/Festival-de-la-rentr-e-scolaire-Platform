@@ -45,10 +45,20 @@ const config = {
     port: int(process.env.SMTP_PORT, 465),
     secure: bool(process.env.SMTP_SECURE, true),
     user: process.env.SMTP_USER || '',
-    pass: process.env.SMTP_PASS || '',
-    from: process.env.MAIL_FROM || 'contact@bellaqueenfestival.tn',
-    fromName: process.env.MAIL_FROM_NAME || 'FIESTADREAM 2026',
-    replyTo: process.env.MAIL_REPLY_TO || 'contact@bellaqueenfestival.tn',
+    /* Google shows App Passwords as four groups — "abcd efgh ijkl mnop" — and
+       people paste them with the spaces. The spaces are display-only, never
+       part of the credential, so strip them for Gmail. Other providers keep
+       the password byte-for-byte, since a real password may contain spaces. */
+    pass: /(^|\.)gmail\.com$/i.test(process.env.SMTP_HOST || '') || /@gmail\.com$/i.test(process.env.SMTP_USER || '')
+      ? (process.env.SMTP_PASS || '').replace(/\s+/g, '')
+      : (process.env.SMTP_PASS || ''),
+    /* Defaults follow the account you log in with, never a domain that may
+       not exist yet. Gmail can only send as its own address; a MAIL_FROM or
+       MAIL_REPLY_TO pointing elsewhere makes replies bounce and puts a dead
+       contact link in the footer of every e-mail. */
+    from: process.env.MAIL_FROM || process.env.SMTP_USER || '',
+    fromName: process.env.MAIL_FROM_NAME || 'أمل الطفولة',
+    replyTo: process.env.MAIL_REPLY_TO || process.env.MAIL_FROM || process.env.SMTP_USER || '',
     phone: process.env.FESTIVAL_PHONE || '+216 —',
     /* Who gets told when a school registers. Comma-separated; leave blank to
        switch the alerts off entirely. These messages carry the director's
@@ -97,10 +107,42 @@ function assertBootConfig() {
     fail('MONGODB_URI still contains angle brackets — the <db_password>\n' +
       '  placeholder was never replaced with the real password.');
   }
+  mailWarnings().forEach(w => console.warn('\n[mail] WARNING — ' + w + '\n'));
+
   if (config.edition.opensAt && Number.isNaN(config.edition.opensAt.getTime())) {
     fail('REGISTRATION_OPENS_AT is not a valid date. Use an ISO instant such as\n' +
       '  2026-09-25T09:00:00+01:00, or leave it blank to open immediately.');
   }
+}
+
+/* Mail mistakes that don't crash anything — mail still goes out — but
+   quietly break replies or get the account blocked on launch day. */
+function mailWarnings() {
+  const m = config.mail, out = [];
+  if (!m.user) return out;                      // dry-run mode, nothing to check
+  const lc = v => String(v || '').toLowerCase();
+  const isGmail = /(^|\.)gmail\.com$/i.test(m.host || '') || /@gmail\.com$/i.test(m.user);
+  if (!isGmail) return out;
+
+  if (m.from && lc(m.from) !== lc(m.user)) {
+    out.push(`MAIL_FROM is "${m.from}" but Gmail can only send as "${m.user}".\n` +
+      '  Gmail will rewrite the sender anyway, and the contact link printed in every\n' +
+      '  e-mail footer will point at the wrong address. Leave MAIL_FROM empty.');
+  }
+  if (m.replyTo && lc(m.replyTo) !== lc(m.user) && !/@gmail\.com$/i.test(m.replyTo)) {
+    out.push(`MAIL_REPLY_TO is "${m.replyTo}". If that mailbox does not exist yet,\n` +
+      '  every director who replies to a confirmation gets a bounce.\n' +
+      '  Leave MAIL_REPLY_TO empty to reply to the Gmail account itself.');
+  }
+  const n = m.organisers.length, cap = config.edition.maxSchools;
+  if (n > 1) {
+    const peak = cap + cap * n;
+    out.push(`ORGANISER_EMAILS lists ${n} addresses. Every registration e-mails each of them.\n` +
+      `  If all ${cap} places fill in one day that is about ${peak} e-mails, and free Gmail\n` +
+      '  blocks ALL sending — school confirmations included — for up to 24 hours once\n' +
+      '  it passes ~500 recipients. Use a single organiser address.');
+  }
+  return out;
 }
 
 /* Fail at boot, not at 3am. */
@@ -113,4 +155,4 @@ function assertProductionConfig() {
   if (bad.length) throw new Error('Invalid production config: ' + bad.join(', '));
 }
 
-module.exports = { config, assertBootConfig, assertProductionConfig };
+module.exports = { config, assertBootConfig, assertProductionConfig, mailWarnings };

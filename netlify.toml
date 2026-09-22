@@ -1,0 +1,80 @@
+# ═══════════════════════════════════════════════════════════════════════════
+#  Netlify — FIESTADREAM 2026 / bellaqueenfestival.tn
+#
+#  Netlify serves ONLY the frontend/ folder. The backend is never deployed
+#  here and cannot be: Netlify runs static files and short serverless
+#  functions, while the API is a long-lived Express server holding WebSocket
+#  connections, an in-memory snapshot and a cron job. The API lives on the
+#  VPS; Netlify's CDN absorbs the static traffic in front of it.
+# ═══════════════════════════════════════════════════════════════════════════
+
+[build]
+  publish = "frontend"
+  command = "echo 'Static site: no build step.'"
+
+
+# ─── Security headers — every page ─────────────────────────────────────────
+[[headers]]
+  for = "/*"
+  [headers.values]
+    # CSP. Audited against the pages: the only third-party origins are Google
+    # Fonts; there is no eval() and no inline on*= handler, so neither
+    # 'unsafe-eval' nor 'unsafe-hashes' is needed.
+    #
+    # 'unsafe-inline' is still required for scripts and styles, because both
+    # pages keep their code inline. That means CSP cannot stop an injected
+    # <script> from running — escaping (tested) is the defence there. What
+    # CSP DOES do here is contain the damage: connect-src and img-src are
+    # locked to our own origins, so even a successful injection cannot ship
+    # data to an attacker's server.
+    #
+    # connect-src already allows the production API. In demo mode no request
+    # goes there, so pre-allowing our own future domain costs nothing and
+    # means this line need not change at go-live.
+    Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob:; media-src 'self' data: blob:; connect-src 'self' https://api.bellaqueenfestival.tn wss://api.bellaqueenfestival.tn; frame-ancestors 'none'; form-action 'self'; base-uri 'self'; object-src 'none'; upgrade-insecure-requests"
+    X-Frame-Options = "DENY"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "camera=(), microphone=(), geolocation=(), payment=(), usb=(), interest-cohort=()"
+    Cross-Origin-Opener-Policy = "same-origin"
+    Strict-Transport-Security = "max-age=31536000; includeSubDomains"
+
+
+# ─── The admin panel: never indexed, never cached ──────────────────────────
+[[headers]]
+  for = "/admin.html"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow, noarchive"
+    Cache-Control = "no-store, max-age=0"
+
+
+# ─── Static assets: cache for a day ────────────────────────────────────────
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=86400"
+
+
+# ═══════════════════════════════════════════════════════════════════════════
+#  PREVIEW-ONLY — DELETE EVERYTHING BELOW THIS LINE BEFORE PRODUCTION
+#
+#  Leaving the first block in production would hide the festival from Google.
+#  Leaving the second would lock the organisers out of their own admin panel.
+# ═══════════════════════════════════════════════════════════════════════════
+
+# Keep the preview out of search results. (The page also adds a noindex meta
+# tag by itself whenever it runs in demo mode — this is the belt to that
+# braces.)
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow"
+
+# The admin panel needs the live API. On the preview there is none, so its
+# login would fail with a misleading "wrong password" — send visitors to the
+# public site instead.
+[[redirects]]
+  from = "/admin.html"
+  to = "/"
+  status = 302
+  force = true
